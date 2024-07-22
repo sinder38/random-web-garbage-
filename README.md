@@ -19,5 +19,5 @@ Yes, it is.
 ### Why is it cringe?
 Mainly because I am not a frontend dev.
 
-### Contents:
+## Contents:
 - Simle select for forms with search. looks fine
