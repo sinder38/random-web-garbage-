@@ -11,10 +11,13 @@ I want to store this somewhere I won't forget.
 Mainly because I am not a frontend dev.
 
 ### Dependencies
-I prefer to use no dependencies. Only vanilla JS, CSS, and HTML5.
+Strictly only vanilla JS, CSS, and HTML.
 
 ### Is this cringe?
-Yes, it is. 😅
+Yes, it is.
 
 ### Why is it cringe?
 Mainly because I am not a frontend dev.
+
+### Contents:
+- Simle select for forms with search. looks fine
