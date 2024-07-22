@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Select Input</title>
+    <title>Custom Select Input</title>
     <style>
         .hidden {
             display: none;
         }
+
         .searchSelectorContainer {
             position: relative;
-            width: 20rem;
             display: block;
             max-width: 20rem;
-            margin-top: 2rem;
             align-items: center;
             flex-direction: column;
             justify-content: center;
+            background: inherit;
         }
 
         .searchSelectorContainer .searchSelector {
@@ -26,11 +26,11 @@
             justify-content: space-between;
             width: 100%;
             display: flex;
-            background: #ffffff;
+            background: inherit;
             align-items: center;
         }
 
-        .searchSelectorContainer .searchSelector input{
+        .searchSelectorContainer .searchSelector input {
             width: 100%;
             padding: 0 0.4rem;
             outline: none;
@@ -41,8 +41,8 @@
         }
 
         /*Selector*/
-        .searchSelectorContainer .dropdown{
-            position: absolute;
+        .searchSelectorContainer .dropdown {
+            position: static; /* cant use absolute since some dropdown are inside scrollable element */
             background-color: #ffffff;
             width: 100%;
             overflow-y: auto;
@@ -50,29 +50,30 @@
             line-height: 1.5;
             font-weight: 400;
             display: none;
-            box-shadow: 0 6px 12px rgba(0,0,0,.175);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
             border-radius: .375rem;
-            z-index: 1;
+            z-index: 99999999;
             transition: background-color 0.1s ease-in-out;
             max-height: 15rem;
-
+            max-width: 20rem;
         }
-        .searchSelectorContainer.show .dropdown{
+
+        .searchSelectorContainer.show .dropdown {
             display: block;
         }
 
 
-        .searchSelectorContainer  .dropdown::-webkit-scrollbar {
+        .searchSelectorContainer .dropdown::-webkit-scrollbar {
             width: 6px;
         }
 
-        .searchSelectorContainer .dropdown::-webkit-scrollbar-track{
+        .searchSelectorContainer .dropdown::-webkit-scrollbar-track {
             width: 2px;
             border-radius: 0.4rem;
             background: #b6b6b6;
         }
 
-        .searchSelectorContainer  .dropdown::-webkit-scrollbar-thumb{
+        .searchSelectorContainer .dropdown::-webkit-scrollbar-thumb {
             border-radius: .2rem;
             background: #505050;
         }
@@ -84,83 +85,93 @@
             padding: 0.4rem 0.4rem;
         }
 
-        .searchSelectorContainer  .dropdown .option.selected {
+        .searchSelectorContainer .dropdown .option.selected {
             background: rgba(22, 163, 74, 0.5);
         }
 
-        .searchSelectorContainer  .dropdown .option:last-child {
+        .searchSelectorContainer .dropdown .option:last-child {
             left: 0;
             border: 0;
         }
+
         .searchSelectorContainer .dropdown .option:hover {
             background: rgba(134, 239, 172, 0.5);
         }
     </style>
 </head>
 <body>
-    <div class="searchSelectorContainer">
-        <div class="searchSelector">
-            <input type="text" class="searchSelectorInput">
-            <input type="hidden" name="search_sel_result" value=""> <!-- need this input for forms-->
-        </div>
-        <div class="dropdown">
-            <div class="option" data-value="1">Cat</div>
-            <div class="option" data-value="2">Dog</div>
-            <div class="option" data-value="3">Bird</div>
-            <div class="option" data-value="4">Fish</div>
-            <div class="option" data-value="5">Hamster</div>
-            <div class="option" data-value="6">Rabbit</div>
-            <div class="option" data-value="7">Turtle</div>
-            <div class="option" data-value="8">Snake</div>
-            <div class="option" data-value="9">Lizard</div>
-            <div class="option" data-value="10">Horse</div>
-        </div>
+<div class="searchSelectorContainer">
+    <div class="searchSelector">
+        <input type="text" class="searchSelectorInput">
+        <input type="hidden" name="search_sel_result" value=""> <!-- need this input for forms-->
     </div>
+    <div class="dropdown">
+        <div class="option" data-value="1">Cat</div>
+        <div class="option" data-value="2">Dog</div>
+        <div class="option" data-value="3">Bird</div>
+        <div class="option" data-value="4">Fish</div>
+        <div class="option" data-value="5">Hamster</div>
+        <div class="option" data-value="6">Rabbit</div>
+        <div class="option" data-value="7">Turtle</div>
+        <div class="option" data-value="8">Snake</div>
+        <div class="option" data-value="9">Lizard</div>
+        <div class="option" data-value="10">Horse</div>
+    </div>
+</div>
 <script>
     "use strict";
-    document.querySelectorAll('.searchSelectorContainer').forEach( ssc =>{
-        let searchSelector = ssc.querySelector('.searchSelector');
-        let searchSelectorInput = searchSelector.querySelector('.searchSelectorInput');
-        let dropdown = ssc.querySelector('.dropdown');
-        let options = dropdown.querySelectorAll('.option');
-        let input = searchSelector.querySelector('input[type="hidden"]');    // for forms
 
-        // show select options on click
-        searchSelector.addEventListener('click', () => {
-            ssc.classList.add('show');
-        })
+    function apply_searchSelector_functional(element) {
+        // console.log("applied to:",element);
+        element.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+            let searchSelector = ssc.querySelector('.searchSelector');
+            let searchSelectorInput = searchSelector.querySelector('.searchSelectorInput');
+            let dropdown = ssc.querySelector('.dropdown');
+            let options = dropdown.querySelectorAll('.option');
+            let input = searchSelector.querySelector('input[type="hidden"]');    // for forms
 
-        // options filter
-        searchSelectorInput.addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            // console.log("filter:",filter);
-            // let filteredItemsLength = 0; //TODO add no search results display
-            options.forEach(function(item) {
-                if (item.textContent.toLowerCase().includes(filter)) {
-                    // filteredItemsLength +=1;
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
-            });
-            // if (filteredItemsLength === 0){
-            //     const li = document.createElement("li");
-            //     li.appendChild(countryName);
-            //     ul.appendChild(li);
-            // }
-        });
-
-        // on select: hide options, display values in inputs
-        options.forEach(option => {
-            option.addEventListener('click', (e) => {
-                searchSelectorInput.value = e.target.innerText;
-                input.value = e.target.getAttribute('data-value'); // for forms
-                options.forEach(option => option.classList.remove('selected'));
-                e.target.classList.add('selected');
-                ssc.classList.remove('show');
+            // show select options on click
+            searchSelector.addEventListener('click', () => {
+                document.querySelectorAll('.searchSelectorContainer').forEach(other_ssc => {
+                    other_ssc.classList.remove('show');
+                });
+                ssc.classList.add('show');
             })
+
+            // options filter
+            searchSelectorInput.addEventListener('keyup', function () {
+                let filter = this.value.toLowerCase();
+                // console.log("filter:",filter);
+                // let filteredItemsLength = 0; //TODO add no search results display
+                options.forEach(function (item) {
+                    if (item.textContent.toLowerCase().includes(filter)) {
+                        // filteredItemsLength +=1;
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                // if (filteredItemsLength === 0){
+                //     const li = document.createElement("li");
+                //     li.appendChild(countryName);
+                //     ul.appendChild(li);
+                // }
+            });
+
+            // on select: hide options, display values in inputs
+            options.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    searchSelectorInput.value = e.target.innerText;
+                    input.value = e.target.getAttribute('data-value'); // for forms
+                    options.forEach(option => option.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                    ssc.classList.remove('show');
+                })
+            });
         });
-    });
+    }
+
+    apply_searchSelector_functional(document);
 </script>
 </body>
 </html>
