@@ -40,6 +40,10 @@
             border: 2px solid rgb(0 0 0 / 30%);
         }
 
+        .searchSelectorContainer .searchSelector input.selected {
+            border-color: rgba(22, 163, 74, 0.5);
+        }
+
         /*Selector*/
         .searchSelectorContainer .dropdown {
             position: fixed; /* cant use absolute since some dropdown are inside scrollable element */
@@ -97,6 +101,15 @@
         .searchSelectorContainer .dropdown .option:hover {
             background: rgba(134, 239, 172, 0.5);
         }
+        /*Error message */
+        .searchSelectorContainer .dropdown .err_message{
+            list-style: none;
+            padding: 0.4rem 0.4rem;
+            display: none;
+        }
+        .searchSelectorContainer .dropdown .err_message.show{
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -106,6 +119,7 @@
         <input type="hidden" name="search_sel_result" value=""> <!-- need this input for forms-->
     </div>
     <div class="dropdown">
+        <div class="err_message">No results...</div>
         <div class="option" data-value="1">Cat</div>
         <div class="option" data-value="2">Dog</div>
         <div class="option" data-value="3">Bird</div>
@@ -129,6 +143,7 @@
             let dropdown = ssc.querySelector('.dropdown');
             let options = dropdown.querySelectorAll('.option');
             let input = searchSelector.querySelector('input[type="hidden"]');    // for forms
+            let err_message = dropdown.querySelector('.err_message');
 
             // show select options on click
             searchSelector.addEventListener('click', () => {
@@ -136,26 +151,27 @@
                     other_ssc.classList.remove('show');
                 });
                 ssc.classList.add('show');
+                searchSelectorInput.classList.add('selected');
             })
 
             // options filter
             searchSelectorInput.addEventListener('keyup', function () {
                 let filter = this.value.toLowerCase();
                 // console.log("filter:",filter);
-                // let filteredItemsLength = 0; //TODO add no search results display
+                let filteredItemsLength = 0;
                 options.forEach(function (item) {
                     if (item.textContent.toLowerCase().includes(filter)) {
-                        // filteredItemsLength +=1;
+                        filteredItemsLength += 1;
                         item.classList.remove('hidden');
                     } else {
                         item.classList.add('hidden');
                     }
                 });
-                // if (filteredItemsLength === 0){
-                //     const li = document.createElement("li");
-                //     li.appendChild(countryName);
-                //     ul.appendChild(li);
-                // }
+                if (filteredItemsLength === 0){
+                   err_message.classList.add("show");
+                } else{
+                    err_message.classList.remove("show");
+                }
             });
 
             // on select: hide options, display values in inputs
