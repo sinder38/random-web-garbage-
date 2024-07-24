@@ -187,6 +187,20 @@
         });
     }
 
+    // hide dropdowns when clicking outside
+document.addEventListener('click', function(event) {
+    let isClickInside = false;
+    document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+        if (ssc.contains(event.target)) {
+            isClickInside = true;
+        }
+    });
+    if (!isClickInside) {
+        document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+            ssc.classList.remove('show');
+        });
+    }
+});
     apply_searchSelector_functional(document);
 </script>
 </body>
