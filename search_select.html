@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Select Input</title>
     <style>
-        .hidden {
-            display: none;
-        }
-
         .searchSelectorContainer {
             position: relative;
             display: block;
@@ -48,7 +44,7 @@
         .searchSelectorContainer .dropdown {
             position: fixed; /* cant use absolute since some dropdown are inside scrollable element */
             background-color: #ffffff;
-            width: 100%;
+            /*width: 100%;*/
             overflow-y: auto;
             overflow-x: hidden;
             line-height: 1.5;
@@ -59,7 +55,7 @@
             z-index: 99999999;
             transition: background-color 0.1s ease-in-out;
             max-height: 15rem;
-            max-width: 20rem;
+            /*max-width: 20rem;*/
         }
 
         .searchSelectorContainer.show .dropdown {
@@ -87,6 +83,7 @@
             cursor: pointer;
             list-style: none;
             padding: 0.4rem 0.4rem;
+            width: 100%;
         }
 
         .searchSelectorContainer .dropdown .option.selected {
@@ -110,6 +107,18 @@
         .searchSelectorContainer .dropdown .err_message.show{
             display: block;
         }
+        /* Hide descriptions by default */
+        .description {
+            display: none;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Show descriptions on hover */
+        .option:hover .description {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -120,18 +129,50 @@
     </div>
     <div class="dropdown">
         <div class="err_message">No results...</div>
-        <div class="option" data-value="1">Cat</div>
-        <div class="option" data-value="2">Dog</div>
-        <div class="option" data-value="3">Bird</div>
-        <div class="option" data-value="4">Fish</div>
-        <div class="option" data-value="5">Hamster</div>
-        <div class="option" data-value="6">Rabbit</div>
-        <div class="option" data-value="7">Turtle</div>
-        <div class="option" data-value="8">Snake</div>
-        <div class="option" data-value="9">Lizard</div>
-        <div class="option" data-value="10">Horse</div>
+        <div class="option" data-value="1">
+            <strong>Cat</strong>
+            <span class="description"> - A small, domesticated carnivorous mammal with soft fur.</span>
+        </div>
+        <div class="option" data-value="2">
+            <strong>Dog</strong>
+            <span class="description"> - A loyal, domesticated mammal known for its companionship.</span>
+        </div>
+        <div class="option" data-value="3">
+            <strong>Birddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</strong>
+            <span class="description"> - A warm-blooded, egg-laying creature with feathers and wings.</span>
+        </div>
+        <div class="option" data-value="4">
+            <strong>Fish</strong>
+            <span class="description"> - An aquatic animal that typically has gills and fins.</span>
+        </div>
+        <div class="option" data-value="5">
+            <strong>Hamster</strong>
+            <span class="description"> - A small rodent often kept as a pet.</span>
+        </div>
+        <div class="option" data-value="6">
+            <strong>Rabbit</strong>
+            <span class="description"> - A small mammal with long ears and a fluffy tail.</span>
+        </div>
+        <div class="option" data-value="7">
+            <strong>Turtle</strong>
+            <span class="description"> - A reptile with a hard shell that lives in or near water.</span>
+        </div>
+        <div class="option" data-value="8">
+            <strong>Snake</strong>
+            <span class="description"> - A legless reptile with a long, slender body.</span>
+        </div>
+        <div class="option" data-value="9">
+            <strong>Lizard</strong>
+            <span class="description"> - A reptile with a long tail and four legs.</span>
+        </div>
+        <div class="option" data-value="10">
+            <strong>Horse</strong>
+            <span class="description"> - A large, strong animal known for its speed and endurance.</span>
+        </div>
     </div>
 </div>
+
+
 <script>
     "use strict";
 
@@ -176,11 +217,11 @@
 
             // on select: hide options, display values in inputs
             options.forEach(option => {
-                option.addEventListener('click', (e) => {
-                    searchSelectorInput.value = e.target.innerText;
-                    input.value = e.target.getAttribute('data-value'); // for forms
-                    options.forEach(option => option.classList.remove('selected'));
-                    e.target.classList.add('selected');
+                option.addEventListener('click', () => {
+                    searchSelectorInput.value = option.querySelector('strong').innerText;
+                    input.value = option.getAttribute('data-value'); // for forms
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
                     ssc.classList.remove('show');
                 })
             });
@@ -188,19 +229,21 @@
     }
 
     // hide dropdowns when clicking outside
-document.addEventListener('click', function(event) {
-    let isClickInside = false;
-    document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
-        if (ssc.contains(event.target)) {
-            isClickInside = true;
+    document.addEventListener('click', function(event) {
+        let isClickInside = false;
+        document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+            if (ssc.contains(event.target)) {
+                isClickInside = true;
+            }
+        });
+        if (!isClickInside) {
+            document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+                ssc.classList.remove('show');
+                ssc.querySelector('.searchSelectorInput').classList.remove('selected');
+            });
         }
     });
-    if (!isClickInside) {
-        document.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
-            ssc.classList.remove('show');
-        });
-    }
-});
+
     apply_searchSelector_functional(document);
 </script>
 </body>
