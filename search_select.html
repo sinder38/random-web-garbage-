@@ -179,6 +179,10 @@
     function apply_searchSelector_functional(element) {
         // console.log("applied to:",element);
         element.querySelectorAll('.searchSelectorContainer').forEach(ssc => {
+            if (ssc.hasAttribute('fnc-applied')) {
+                return;
+            }
+            element.setAttribute('fnc-applied', 'true');
             let searchSelector = ssc.querySelector('.searchSelector');
             let searchSelectorInput = searchSelector.querySelector('.searchSelectorInput');
             let dropdown = ssc.querySelector('.dropdown');
